@@ -1,0 +1,471 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$600000$Kuad3FKyWI1OKFBJMN7kNK$6XM+Opow3JSyPErn3iDYndjJ2kpahSAAYq4pqwopNJU=",
+    "last_login": "2026-03-07T18:36:23.509Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-03-07T18:15:13.647Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "nxfrwao2w0a4ztyj93d2jbztywafnq2k",
+  "fields": {
+    "session_data": ".eJxVjE0OwiAYBe_C2hCEtoBL9z0D-f6QqqFJaVfGu2uTLnT7Zua9VIJtLWlrsqSJ1UWd1el3Q6CH1B3wHept1jTXdZlQ74o-aNPjzPK8Hu7fQYFWvrWLJhobOk-xl4xeMjvvQ-RIHqGzOaJwJp-JgoEBWcCZXhw4smjMoN4f9f84zw:1vywLj:-7TDQNNOuPMhYLbaLSQbT3ofjNBaTuX8zgoimGyQU-k",
+    "expire_date": "2026-03-21T18:26:03.693Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "p385walvmrot22sr1qxokimgbrx16du1",
+  "fields": {
+    "session_data": ".eJxVjE0OwiAYBe_C2hCEtoBL9z0D-f6QqqFJaVfGu2uTLnT7Zua9VIJtLWlrsqSJ1UWd1el3Q6CH1B3wHept1jTXdZlQ74o-aNPjzPK8Hu7fQYFWvrWLJhobOk-xl4xeMjvvQ-RIHqGzOaJwJp-JgoEBWcCZXhw4smjMoN4f9f84zw:1vywVj:LYeLEBC8dqhLxkUcIaDf9S2EWVKCXucYDbsOB4SHULo",
+    "expire_date": "2026-03-21T18:36:23.583Z"
+  }
+},
+{
+  "model": "store.category",
+  "pk": 1,
+  "fields": {
+    "name": "Birthday 🎂",
+    "slug": "birthday",
+    "image": ""
+  }
+},
+{
+  "model": "store.category",
+  "pk": 2,
+  "fields": {
+    "name": "Romantic ❤️",
+    "slug": "romantic",
+    "image": ""
+  }
+},
+{
+  "model": "store.category",
+  "pk": 3,
+  "fields": {
+    "name": "Corporate 💼",
+    "slug": "corporate",
+    "image": ""
+  }
+},
+{
+  "model": "store.category",
+  "pk": 4,
+  "fields": {
+    "name": "Surprise Box 🎁",
+    "slug": "surprise-box",
+    "image": ""
+  }
+},
+{
+  "model": "store.promocategory",
+  "pk": 1,
+  "fields": {
+    "name": "Otamga",
+    "slug": "otamga",
+    "image": "",
+    "category": 1,
+    "link": "",
+    "order": 1
+  }
+},
+{
+  "model": "store.promocategory",
+  "pk": 2,
+  "fields": {
+    "name": "Onamga",
+    "slug": "onamga",
+    "image": "",
+    "category": 1,
+    "link": "",
+    "order": 2
+  }
+},
+{
+  "model": "store.promocategory",
+  "pk": 3,
+  "fields": {
+    "name": "Singlimga",
+    "slug": "singlimga",
+    "image": "",
+    "category": 3,
+    "link": "",
+    "order": 3
+  }
+},
+{
+  "model": "store.promocategory",
+  "pk": 4,
+  "fields": {
+    "name": "Sevgilimga",
+    "slug": "sevgilimga",
+    "image": "",
+    "category": 2,
+    "link": "",
+    "order": 4
+  }
+},
+{
+  "model": "store.promocategory",
+  "pk": 5,
+  "fields": {
+    "name": "Ayollar",
+    "slug": "ayollar",
+    "image": "",
+    "category": 3,
+    "link": "",
+    "order": 5
+  }
+},
+{
+  "model": "store.promocategory",
+  "pk": 6,
+  "fields": {
+    "name": "Erkaklar",
+    "slug": "erkaklar",
+    "image": "",
+    "category": 3,
+    "link": "",
+    "order": 6
+  }
+},
+{
+  "model": "store.promocategory",
+  "pk": 7,
+  "fields": {
+    "name": "Bolalar",
+    "slug": "bolalar",
+    "image": "",
+    "category": 1,
+    "link": "",
+    "order": 7
+  }
+},
+{
+  "model": "store.product",
+  "pk": 1,
+  "fields": {
+    "category": 1,
+    "title": "Birthday Cake",
+    "slug": "birthday-cake",
+    "description": "Delicious birthday cake.",
+    "price": "29.99",
+    "discount_percent": null,
+    "discount_price": null,
+    "view_count": 0,
+    "favorite_count": 0,
+    "sold_count": 0,
+    "is_active": true,
+    "is_featured": true,
+    "order_note": "",
+    "created_at": "2026-03-07T17:58:46.494Z",
+    "promo_categories": []
+  }
+},
+{
+  "model": "store.product",
+  "pk": 2,
+  "fields": {
+    "category": 1,
+    "title": "Birthday Balloons",
+    "slug": "birthday-balloons",
+    "description": "Colorful balloon set.",
+    "price": "14.99",
+    "discount_percent": null,
+    "discount_price": null,
+    "view_count": 1,
+    "favorite_count": 0,
+    "sold_count": 0,
+    "is_active": true,
+    "is_featured": false,
+    "order_note": "",
+    "created_at": "2026-03-07T17:58:46.570Z",
+    "promo_categories": []
+  }
+},
+{
+  "model": "store.product",
+  "pk": 3,
+  "fields": {
+    "category": 2,
+    "title": "Romantic Bouquet",
+    "slug": "romantic-bouquet",
+    "description": "Fresh flower bouquet.",
+    "price": "49.99",
+    "discount_percent": null,
+    "discount_price": null,
+    "view_count": 3,
+    "favorite_count": 0,
+    "sold_count": 0,
+    "is_active": true,
+    "is_featured": true,
+    "order_note": "",
+    "created_at": "2026-03-07T17:58:46.644Z",
+    "promo_categories": []
+  }
+},
+{
+  "model": "store.product",
+  "pk": 4,
+  "fields": {
+    "category": 2,
+    "title": "Love Chocolate Box",
+    "slug": "love-chocolate-box",
+    "description": "Premium chocolates.",
+    "price": "24.99",
+    "discount_percent": null,
+    "discount_price": null,
+    "view_count": 1,
+    "favorite_count": 0,
+    "sold_count": 0,
+    "is_active": true,
+    "is_featured": false,
+    "order_note": "",
+    "created_at": "2026-03-07T17:58:46.717Z",
+    "promo_categories": []
+  }
+},
+{
+  "model": "store.product",
+  "pk": 5,
+  "fields": {
+    "category": 3,
+    "title": "Corporate Gift Set",
+    "slug": "corporate-gift-set",
+    "description": "Professional gift set.",
+    "price": "59.99",
+    "discount_percent": null,
+    "discount_price": null,
+    "view_count": 0,
+    "favorite_count": 0,
+    "sold_count": 0,
+    "is_active": true,
+    "is_featured": false,
+    "order_note": "",
+    "created_at": "2026-03-07T17:58:46.791Z",
+    "promo_categories": []
+  }
+},
+{
+  "model": "store.product",
+  "pk": 6,
+  "fields": {
+    "category": 3,
+    "title": "Office Hamper",
+    "slug": "office-hamper",
+    "description": "Gourmet office hamper.",
+    "price": "79.99",
+    "discount_percent": null,
+    "discount_price": null,
+    "view_count": 1,
+    "favorite_count": 0,
+    "sold_count": 0,
+    "is_active": true,
+    "is_featured": true,
+    "order_note": "",
+    "created_at": "2026-03-07T17:58:46.865Z",
+    "promo_categories": []
+  }
+},
+{
+  "model": "store.product",
+  "pk": 7,
+  "fields": {
+    "category": 4,
+    "title": "Mystery Surprise Box",
+    "slug": "mystery-surprise-box",
+    "description": "Curated surprise items.",
+    "price": "39.99",
+    "discount_percent": null,
+    "discount_price": null,
+    "view_count": 0,
+    "favorite_count": 0,
+    "sold_count": 0,
+    "is_active": true,
+    "is_featured": true,
+    "order_note": "",
+    "created_at": "2026-03-07T17:58:46.940Z",
+    "promo_categories": []
+  }
+},
+{
+  "model": "store.product",
+  "pk": 8,
+  "fields": {
+    "category": 4,
+    "title": "Mini Surprise Pack",
+    "slug": "mini-surprise-pack",
+    "description": "Small surprise pack.",
+    "price": "19.99",
+    "discount_percent": null,
+    "discount_price": null,
+    "view_count": 0,
+    "favorite_count": 0,
+    "sold_count": 0,
+    "is_active": true,
+    "is_featured": false,
+    "order_note": "",
+    "created_at": "2026-03-07T17:58:47.014Z",
+    "promo_categories": []
+  }
+},
+{
+  "model": "store.productanalytics",
+  "pk": 7,
+  "fields": {
+    "views": 0,
+    "favorites": 0,
+    "cart_additions": 1,
+    "purchases": 0,
+    "last_viewed_at": null
+  }
+},
+{
+  "model": "store.productanalytics",
+  "pk": 6,
+  "fields": {
+    "views": 1,
+    "favorites": 0,
+    "cart_additions": 1,
+    "purchases": 0,
+    "last_viewed_at": "2026-03-07T18:32:54.120Z"
+  }
+},
+{
+  "model": "store.productanalytics",
+  "pk": 5,
+  "fields": {
+    "views": 0,
+    "favorites": 0,
+    "cart_additions": 1,
+    "purchases": 0,
+    "last_viewed_at": null
+  }
+},
+{
+  "model": "store.productanalytics",
+  "pk": 4,
+  "fields": {
+    "views": 1,
+    "favorites": 0,
+    "cart_additions": 1,
+    "purchases": 0,
+    "last_viewed_at": "2026-03-07T18:08:48.594Z"
+  }
+},
+{
+  "model": "store.productanalytics",
+  "pk": 3,
+  "fields": {
+    "views": 3,
+    "favorites": 0,
+    "cart_additions": 2,
+    "purchases": 0,
+    "last_viewed_at": "2026-03-09T17:52:51.412Z"
+  }
+},
+{
+  "model": "store.productanalytics",
+  "pk": 2,
+  "fields": {
+    "views": 1,
+    "favorites": 0,
+    "cart_additions": 2,
+    "purchases": 0,
+    "last_viewed_at": "2026-03-07T21:04:51.595Z"
+  }
+},
+{
+  "model": "store.cart",
+  "pk": 1,
+  "fields": {
+    "session_id": "4ed19fe2-45d8-48bb-8c83-d3fcd1e1e539",
+    "created_at": "2026-03-07T18:05:45.300Z"
+  }
+},
+{
+  "model": "store.cart",
+  "pk": 2,
+  "fields": {
+    "session_id": "7f3771a2-4aba-4c41-8fb5-2be58d7ceb98",
+    "created_at": "2026-03-07T18:32:41.226Z"
+  }
+},
+{
+  "model": "store.cart",
+  "pk": 3,
+  "fields": {
+    "session_id": "dff918b7-7e9c-4af5-9390-af62e6f60947",
+    "created_at": "2026-03-07T18:32:56.130Z"
+  }
+},
+{
+  "model": "store.cart",
+  "pk": 4,
+  "fields": {
+    "session_id": "126bd5b2-6653-47f6-8f7c-37a4047e246f",
+    "created_at": "2026-03-09T15:23:38.451Z"
+  }
+},
+{
+  "model": "store.cartitem",
+  "pk": 2,
+  "fields": {
+    "cart": 1,
+    "product": 4,
+    "quantity": 1,
+    "created_at": "2026-03-07T18:08:50.913Z"
+  }
+},
+{
+  "model": "store.cartitem",
+  "pk": 3,
+  "fields": {
+    "cart": 2,
+    "product": 5,
+    "quantity": 2,
+    "created_at": "2026-03-07T18:32:41.602Z"
+  }
+},
+{
+  "model": "store.cartitem",
+  "pk": 4,
+  "fields": {
+    "cart": 3,
+    "product": 6,
+    "quantity": 3,
+    "created_at": "2026-03-07T18:32:56.507Z"
+  }
+},
+{
+  "model": "store.cartitem",
+  "pk": 5,
+  "fields": {
+    "cart": 1,
+    "product": 2,
+    "quantity": 21,
+    "created_at": "2026-03-07T21:04:39.253Z"
+  }
+},
+{
+  "model": "store.cartitem",
+  "pk": 6,
+  "fields": {
+    "cart": 4,
+    "product": 3,
+    "quantity": 3,
+    "created_at": "2026-03-09T15:23:38.842Z"
+  }
+}
+]
