@@ -2,7 +2,7 @@ import { getApiBaseUrl, getApiUrl } from "./config"
 
 export type ApiMethod = "GET" | "POST" | "PATCH" | "PUT" | "DELETE"
 
-const DEFAULT_TIMEOUT_MS = 15000
+const DEFAULT_TIMEOUT_MS = 60000
 
 export async function apiRequest<T>(
   path: string,
