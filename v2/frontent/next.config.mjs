@@ -10,12 +10,11 @@ const nextConfig = {
       { protocol: "http", hostname: "localhost", port: "8000", pathname: "/media/**" },
       { protocol: "http", hostname: "192.168.0.134", port: "8000", pathname: "/media/**" },
       { protocol: "https", hostname: "placehold.co", pathname: "/**" },
+      { protocol: "https", hostname: "v1-happyshop-3.onrender.com", pathname: "/media/**" },
     ],
   },
-  // Tezlik: kompressiya (default), cache
   compress: true,
   poweredByHeader: false,
-  // Bosh sahifa ma'lumotlari 5 daqiqa cache (backend bilan bir xil)
   experimental: {
     staleTimes: {
       dynamic: 60,
@@ -23,5 +22,4 @@ const nextConfig = {
     },
   },
 }
-
 export default nextConfig
