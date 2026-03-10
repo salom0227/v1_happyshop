@@ -6,19 +6,19 @@ Production-ready configuration with PostgreSQL and environment variables.
 from pathlib import Path
 import os
 from datetime import timedelta
-
 from dotenv import load_dotenv
 
-# Load environment variables from .env (project root = backend/)
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
-# SECURITY
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-change-me-in-production")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() in ("true", "1", "yes")
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0").strip().split(",")
 
-# Application definition
+RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
 INSTALLED_APPS = [
     "jazzmin",
     "django.contrib.admin",
@@ -27,11 +27,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Third-party
     "rest_framework",
     "django_filters",
     "corsheaders",
-    # Project apps (existing API lives in store; new structure for production)
     "store",
     "products",
     "orders",
@@ -43,9 +41,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -72,7 +71,6 @@ TEMPLATES = [
     },
 ]
 
-# Database — PostgreSQL when configured, else SQLite (local run without Postgres)
 _use_postgres = os.getenv("USE_POSTGRES", "").lower() in ("true", "1", "yes") or bool(os.getenv("POSTGRES_PASSWORD"))
 
 if _use_postgres:
@@ -92,10 +90,7 @@ else:
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
-            # "database is locked" xatosini kamaytirish: lock kutish vaqtini oshirish
-            "OPTIONS": {
-                "timeout": 30,
-            }
+            "OPTIONS": {"timeout": 30},
         }
     }
 
@@ -114,13 +109,13 @@ LOCALE_PATHS = [BASE_DIR / "locale"]
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Django REST Framework — bitta blokda
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -128,34 +123,35 @@ REST_FRAMEWORK = {
     ],
 }
 
-# CORS — React/Next.js frontend
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://v1-happyshop.vercel.app",
+    "https://v1-happyshop-bix54aq6x-salom0227s-projects.vercel.app",
 ]
-# DEBUG da tarmoq orqali kirganda (masalan http://192.168.x.x:3000) API ishlashi uchun
-if DEBUG:
-    import re
-    CORS_ALLOWED_ORIGIN_REGEXES = [
-        re.compile(r"^http://127\.0\.0\.1:\d+$"),
-        re.compile(r"^http://localhost:\d+$"),
-        re.compile(r"^http://192\.168\.\d+\.\d+:\d+$"),
-    ]
-CORS_ALLOW_CREDENTIALS = True
 
-# Auth: login with email
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://v1-happyshop.*\.vercel\.app$",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = ["DELETE", "GET", "OPTIONS", "PATCH", "POST", "PUT"]
+CORS_ALLOW_HEADERS = [
+    "accept", "accept-encoding", "authorization",
+    "content-type", "dnt", "origin",
+    "user-agent", "x-csrftoken", "x-requested-with",
+]
+
 AUTHENTICATION_BACKENDS = [
     "users.auth_backends.EmailAuthBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
-# JWT (REST Framework) — yuqoridagi REST_FRAMEWORK blokida birlashtirilgan
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 
-# Redis cache for categories, featured products, banners, home page data
 REDIS_URL = os.getenv("REDIS_URL", "redis://127.0.0.1:6379/1")
 try:
     import django_redis  # noqa: F401
@@ -177,14 +173,10 @@ except ImportError:
         }
     }
 
-# Sayt to'liq URL (rasmlar, linklar uchun)
 SITE_URL = os.getenv("SITE_URL", "http://127.0.0.1:8000").rstrip("/")
-
-# Telegram — buyurtma cheki kanalga yuboriladi (TELEGRAM_CHAT_ID: kanal yoki guruh id, masalan -100...)
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "") or os.getenv("ADMIN_CHAT_ID", "")
 
-# Django Jazzmin — modern admin UI
 JAZZMIN_SETTINGS = {
     "site_title": "Happy Shop Admin",
     "site_header": "Happy Shop",
@@ -232,6 +224,7 @@ JAZZMIN_SETTINGS = {
     "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
     "language_chooser": False,
 }
+
 JAZZMIN_UI_TWEAKS = {
     "navbar_small_text": False,
     "footer_small_text": False,
