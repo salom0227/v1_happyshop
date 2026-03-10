@@ -1,0 +1,165 @@
+# Django admin — O'zbek tarjimalari
+# LANGUAGE: uz
+msgid ""
+msgstr ""
+"Project-Id-Version: Django\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Uzbek\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Administration"
+msgstr "Boshqaruv"
+
+msgid "Site administration"
+msgstr "Sayt boshqaruvi"
+
+msgid "Log in"
+msgstr "Kirish"
+
+msgid "Log out"
+msgstr "Chiqish"
+
+msgid "Home"
+msgstr "Bosh sahifa"
+
+msgid "Add"
+msgstr "Qoʻshish"
+
+msgid "Change"
+msgstr "Tahrirlash"
+
+msgid "View"
+msgstr "Koʻrish"
+
+msgid "Delete"
+msgstr "Oʻchirish"
+
+msgid "Save"
+msgstr "Saqlash"
+
+msgid "Save and add another"
+msgstr "Saqlash va yana qoʻshish"
+
+msgid "Save and continue editing"
+msgstr "Saqlash va tahrirlashni davom etish"
+
+msgid "Save as new"
+msgstr "Yangi sifatida saqlash"
+
+msgid "Save and view"
+msgstr "Saqlash va koʻrish"
+
+msgid "Search"
+msgstr "Qidirish"
+
+msgid "Filter"
+msgstr "Filtrlash"
+
+msgid "Clear all filters"
+msgstr "Barcha filtrlarni tozalash"
+
+msgid "Go"
+msgstr "Bajarish"
+
+msgid "Action:"
+msgstr "Amal:"
+
+msgid "Remove"
+msgstr "Olib tashlash"
+
+msgid "Yes"
+msgstr "Ha"
+
+msgid "No"
+msgstr "Yoʻq"
+
+msgid "All"
+msgstr "Barchasi"
+
+msgid "Unknown"
+msgstr "Nomaʼlum"
+
+msgid "Are you sure?"
+msgstr "Ishonchingiz komilmi?"
+
+msgid "History"
+msgstr "Tarix"
+
+msgid "View on site"
+msgstr "Saytda koʻrish"
+
+msgid "Documentation"
+msgstr "Hujjatlar"
+
+msgid "Welcome,"
+msgstr "Xush kelibsiz,"
+
+msgid "View site"
+msgstr "Saytni koʻrish"
+
+msgid "Username"
+msgstr "Foydalanuvchi"
+
+msgid "Password"
+msgstr "Parol"
+
+msgid "Change password"
+msgstr "Parolni oʻzgartirish"
+
+msgid "Please correct the error below."
+msgstr "Quyidagi xatolikni tuzating."
+
+msgid "Please correct the errors below."
+msgstr "Quyidagi xatoliklarni tuzating."
+
+msgid "Close"
+msgstr "Yopish"
+
+msgid "Show all"
+msgstr "Barchasini koʻrsatish"
+
+msgid "Breadcrumbs"
+msgstr "Yoʻl"
+
+msgid "Page not found"
+msgstr "Sahifa topilmadi"
+
+msgid "Objects"
+msgstr "Obʼektlar"
+
+msgid "Run the selected action"
+msgstr "Tanlangan amalni bajarish"
+
+msgid "Clear selection"
+msgstr "Tanlovni tozalash"
+
+#, python-format
+msgid "Add %(name)s"
+msgstr "%(name)s qoʻshish"
+
+#, python-format
+msgid "Delete selected %(verbose_name_plural)s"
+msgstr "Tanlangan %(verbose_name_plural)s ni oʻchirish"
+
+#, python-format
+msgid "Successfully deleted %(count)d %(items)s."
+msgstr "%(count)d ta %(items)s muvaffaqiyatli oʻchirildi."
+
+#, python-format
+msgid "Add another %(verbose_name)s"
+msgstr "Yana %(verbose_name)s qoʻshish"
+
+#, python-format
+msgid "Select all %(total_count)s %(module_name)s"
+msgstr "Barcha %(total_count)s ta %(module_name)s ni tanlash"
+
+#, python-format
+msgid "Models in the %(name)s application"
+msgstr "%(name)s ilovasidagi modellar"

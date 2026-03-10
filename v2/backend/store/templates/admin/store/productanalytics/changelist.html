@@ -1,0 +1,17 @@
+{% extends "admin/change_list.html" %}
+{% load i18n %}
+
+{% block result_list %}
+  {% if analytics_summary %}
+  <div class="module" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px;">
+    <h3 style="margin-top: 0;">📊 Umumiy analitika</h3>
+    <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 24px;">
+      <li><strong>Koʻrilishlar:</strong> {{ analytics_summary.total_views|default:0 }}</li>
+      <li><strong>Sevimlilar:</strong> {{ analytics_summary.total_favorites|default:0 }}</li>
+      <li><strong>Savatga qoʻshilgan:</strong> {{ analytics_summary.total_cart_adds|default:0 }}</li>
+      <li><strong>Sotilgan (dona):</strong> {{ analytics_summary.total_purchases|default:0 }}</li>
+    </ul>
+  </div>
+  {% endif %}
+  {{ block.super }}
+{% endblock %}

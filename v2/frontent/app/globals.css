@@ -1,0 +1,211 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import '../styles/design-system.css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Keep only tokens not in design-system (design-system defines colors) */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@theme inline {
+  --font-sans: var(--font-apple);
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-happy-coral: var(--happy-coral);
+  --color-happy-rose: var(--happy-rose);
+  --color-happy-cream: var(--happy-cream);
+  --color-happy-warm: var(--happy-warm);
+  --color-happy-green: var(--happy-green);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply text-foreground;
+  }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes header-fly {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.5; }
+  25% { transform: translate(6px, -6px) rotate(3deg); opacity: 0.8; }
+  50% { transform: translate(-4px, -10px) rotate(-2deg); opacity: 0.6; }
+  75% { transform: translate(8px, -4px) rotate(2deg); opacity: 0.75; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes footer-gradient-shift {
+  0% {
+    background-position: 0% 0%, 100% 100%, 30% 80%;
+  }
+  50% {
+    background-position: 40% 15%, 80% 85%, 65% 45%;
+  }
+  100% {
+    background-position: 100% 0%, 0% 100%, 80% 20%;
+  }
+}
+
+@keyframes topbar-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes fall-gift {
+  0% {
+    opacity: 0.7;
+    transform: translateY(-10px) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(55px) rotate(160deg);
+  }
+}
+
+.animate-fall-gift {
+  animation: fall-gift 2.2s ease-in infinite;
+  will-change: transform, opacity;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.4s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-header-fly {
+  animation: header-fly 4s ease-in-out infinite;
+}
+
+/* Bo'limlar scroll da siqilib kirib keladi (iOS uslubi) */
+.scroll-squeeze-section {
+  transform: scale(0.97) translateY(14px);
+  opacity: 0.88;
+  transform-origin: center top;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.scroll-squeeze-section.scroll-squeeze-in {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Nav kategoriyalar — min-height va overflow; fon va border headerda Tailwind bilan (bg-card/95 backdrop-blur border-t border-border) */
+.nav-glass-window {
+  position: relative;
+  min-height: 28px;
+  overflow: hidden;
+}
+.nav-glass-window > div {
+  position: relative;
+  z-index: 1;
+}
+.nav-glass-window::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 6px;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.02), transparent);
+  border-radius: 0 0 1rem 1rem;
+}
+.dark .nav-glass-window::after {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.06), transparent);
+}
+
+/* Navbar ostiga soya — scroll paytida kontent navbar ostiga sirg‘alaganda */
+.shadow-nav-over {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.08),
+    0 12px 24px -4px rgba(0, 0, 0, 0.12);
+}
+.dark .shadow-nav-over {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.25),
+    0 12px 24px -4px rgba(0, 0, 0, 0.35);
+}
+
+/* Mobile / touch */
+@media (hover: none) and (pointer: coarse) {
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+}
+
+.footer-gradient-overlay {
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--happy-coral) 80%, transparent) 0%, transparent 60%),
+    radial-gradient(circle at bottom right, color-mix(in srgb, var(--happy-warm) 80%, transparent) 0%, transparent 60%),
+    radial-gradient(circle at center, color-mix(in srgb, var(--happy-rose) 70%, transparent) 0%, transparent 65%);
+  background-size: 200% 200%;
+  opacity: 0.7;
+  animation: footer-gradient-shift 22s ease-in-out infinite alternate;
+}

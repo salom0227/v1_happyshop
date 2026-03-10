@@ -1,0 +1,218 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+{% block extrahead %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  .dashboard-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .stat-card { background: var(--body-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; text-align: center; }
+  .stat-card .value { font-size: 1.5rem; font-weight: 700; }
+  .stat-card .label { font-size: 0.75rem; color: var(--body-quiet-color); margin-top: 0.25rem; }
+  .dashboard-charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+  .chart-wrap { background: var(--body-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; }
+  .chart-wrap h3 { margin: 0 0 1rem; font-size: 1rem; }
+  .dashboard-widgets { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+  .widget { background: var(--body-bg); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
+  .widget h3 { margin: 0; padding: 0.75rem 1rem; font-size: 0.9rem; border-bottom: 1px solid var(--border-color); }
+  .widget table { width: 100%; font-size: 0.8rem; }
+  .widget th, .widget td { padding: 0.4rem 1rem; text-align: left; }
+  .widget tr:nth-child(even) { background: rgba(0,0,0,0.03); }
+  .widget a { color: var(--link-fg); }
+</style>
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+{% block content_title %}{% trans 'Dashboard' %}{% endblock %}
+{% block breadcrumbs %}
+  <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a> &rsaquo; {% trans 'Dashboard' %}
+{% endblock %}
+
+{% block content %}
+  {# Statistics cards #}
+  <div class="dashboard-stats">
+    <div class="stat-card">
+      <div class="value">{{ stat_total_products }}</div>
+      <div class="label">{% trans 'Total Products' %}</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">{{ stat_total_orders }}</div>
+      <div class="label">{% trans 'Total Orders' %}</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">{{ stat_total_users }}</div>
+      <div class="label">{% trans 'Total Users' %}</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">{{ stat_total_revenue|floatformat:0 }} {% trans 'UZS' %}</div>
+      <div class="label">{% trans 'Total Revenue' %}</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">{{ stat_total_wishlist }}</div>
+      <div class="label">{% trans 'Wishlist Items' %}</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">{{ stat_total_categories }}</div>
+      <div class="label">{% trans 'Categories' %}</div>
+    </div>
+  </div>
+
+  {# Charts #}
+  <div class="dashboard-charts">
+    <div class="chart-wrap">
+      <h3>{% trans 'Sales (last 7 days)' %}</h3>
+      <canvas id="chartSales" height="200"></canvas>
+    </div>
+    <div class="chart-wrap">
+      <h3>{% trans 'Orders (last 7 days)' %}</h3>
+      <canvas id="chartOrders" height="200"></canvas>
+    </div>
+    <div class="chart-wrap">
+      <h3>{% trans 'Top selling products' %}</h3>
+      <canvas id="chartTopProducts" height="200"></canvas>
+    </div>
+    <div class="chart-wrap">
+      <h3>{% trans 'Most viewed products' %}</h3>
+      <canvas id="chartViews" height="200"></canvas>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var salesCtx = document.getElementById('chartSales');
+      if (salesCtx) {
+        new Chart(salesCtx, {
+          type: 'line',
+          data: {
+            labels: {{ chart_sales_labels|safe }},
+            datasets: [{ label: '{% trans "Revenue" %}', data: {{ chart_sales_data|safe }}, borderColor: 'rgb(75, 192, 192)', fill: true, tension: 0.3 }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+      }
+      var ordersCtx = document.getElementById('chartOrders');
+      if (ordersCtx) {
+        new Chart(ordersCtx, {
+          type: 'bar',
+          data: {
+            labels: {{ chart_orders_labels|safe }},
+            datasets: [{ label: '{% trans "Orders" %}', data: {{ chart_orders_data|safe }}, backgroundColor: 'rgba(54, 162, 235, 0.6)' }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+        });
+      }
+      var topCtx = document.getElementById('chartTopProducts');
+      if (topCtx) {
+        new Chart(topCtx, {
+          type: 'bar',
+          data: {
+            labels: {{ chart_top_products_labels|safe }},
+            datasets: [{ label: '{% trans "Sold" %}', data: {{ chart_top_products_data|safe }}, backgroundColor: 'rgba(255, 99, 132, 0.6)' }]
+          },
+          options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
+        });
+      }
+      var viewsCtx = document.getElementById('chartViews');
+      if (viewsCtx) {
+        new Chart(viewsCtx, {
+          type: 'bar',
+          data: {
+            labels: {{ chart_views_labels|safe }},
+            datasets: [{ label: '{% trans "Views" %}', data: {{ chart_views_data|safe }}, backgroundColor: 'rgba(153, 102, 255, 0.6)' }]
+          },
+          options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
+        });
+      }
+    })();
+  </script>
+
+  {# Widgets #}
+  <div class="dashboard-widgets">
+    <div class="widget">
+      <h3>{% trans 'Recent Orders' %} (10)</h3>
+      <table>
+        <thead><tr><th>ID</th><th>{% trans 'Customer' %}</th><th>{% trans 'Total' %}</th><th>{% trans 'Date' %}</th></tr></thead>
+        <tbody>
+          {% for o in recent_orders %}
+          <tr>
+            <td><a href="{% url 'admin:store_order_change' o.id %}">#{{ o.id }}</a></td>
+            <td>{{ o.name }}</td>
+            <td>{{ o.total_price }}</td>
+            <td>{{ o.created_at|date:"d.m.Y H:i" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4">{% trans 'No orders' %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="widget">
+      <h3>{% trans 'Top selling' %}</h3>
+      <table>
+        <thead><tr><th>{% trans 'Product' %}</th><th>{% trans 'Sold' %}</th></tr></thead>
+        <tbody>
+          {% for p in top_selling_products %}
+          <tr>
+            <td><a href="{% url 'admin:store_product_change' p.id %}">{{ p.title|truncatechars:30 }}</a></td>
+            <td>{{ p.sold_count }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="2">{% trans 'None' %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="widget">
+      <h3>{% trans 'Most viewed' %}</h3>
+      <table>
+        <thead><tr><th>{% trans 'Product' %}</th><th>{% trans 'Views' %}</th></tr></thead>
+        <tbody>
+          {% for p in most_viewed_products %}
+          <tr>
+            <td><a href="{% url 'admin:store_product_change' p.id %}">{{ p.title|truncatechars:30 }}</a></td>
+            <td>{{ p.view_count }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="2">{% trans 'None' %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="widget">
+      <h3>{% trans 'Newest users' %}</h3>
+      <table>
+        <thead><tr><th>{% trans 'User' %}</th><th>{% trans 'Joined' %}</th></tr></thead>
+        <tbody>
+          {% for u in newest_users %}
+          <tr>
+            <td><a href="{% url 'admin:auth_user_change' u.id %}">{{ u.email }}</a></td>
+            <td>{{ u.date_joined|date:"d.m.Y" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="2">{% trans 'None' %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {# App list (same as default index) #}
+  {% if app_list %}
+  <h2>{% trans 'Applications' %}</h2>
+  <div id="content-main" class="module">
+    {% for app in app_list %}
+    <div class="app-{{ app.app_label }} module">
+      <table>
+        <caption><a href="{{ app.app_url }}" class="section">{{ app.name }}</a></caption>
+        {% for model in app.models %}
+        <tr>
+          <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
+          <td>{% if model.add_url %}<a href="{{ model.add_url }}" class="addlink">{% trans 'Add' %}</a>{% endif %}</td>
+          <td>{% if model.admin_url %}<a href="{{ model.admin_url }}" class="changelink">{% trans 'Change' %}</a>{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endblock %}
