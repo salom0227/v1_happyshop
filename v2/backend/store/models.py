@@ -6,7 +6,7 @@ from django.utils.text import slugify
 class Category(models.Model):
     name = models.CharField(max_length=255, verbose_name='Nomi')
     slug = models.SlugField(max_length=255, unique=True, verbose_name='Slug')
-    image = models.ImageField(upload_to='categories/', blank=True, null=True, verbose_name='Rasm')
+    image = models.URLField(max_length=500, blank=True, null=True, verbose_name='Rasm URL')
 
     class Meta:
         verbose_name = 'Kategoriya'
@@ -20,7 +20,7 @@ class PromoCategory(models.Model):
     """«Kimga sovg'a tanlaymiz?» bo'limi uchun admin orqali boshqariladigan elementlar."""
     name = models.CharField(max_length=255, verbose_name='Nomi')
     slug = models.SlugField(max_length=255, unique=True, verbose_name='Slug')
-    image = models.ImageField(upload_to='promo_categories/', blank=True, null=True, verbose_name='Rasm')
+    image = models.URLField(max_length=500, blank=True, null=True, verbose_name='Rasm URL')
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
@@ -49,7 +49,7 @@ class Banner(models.Model):
     """Bosh sahifa hero slayder bannerlari (admin orqali boshqariladi)."""
     title = models.CharField(max_length=255, verbose_name='Sarlavha')
     subtitle = models.CharField(max_length=500, blank=True, verbose_name='Qisqa matn')
-    image = models.ImageField(upload_to='banners/', verbose_name='Rasm')
+    image = models.URLField(max_length=500, blank=True, verbose_name='Rasm URL')
     button_text = models.CharField(max_length=100, blank=True, verbose_name='Tugma matni')
     link = models.CharField(max_length=500, blank=True, verbose_name='Tugma havolasi')
     products = models.ManyToManyField(
@@ -169,7 +169,7 @@ class ProductImage(models.Model):
         related_name='images',
         verbose_name='Mahsulot',
     )
-    image = models.ImageField(upload_to='products/', verbose_name='Rasm')
+    image = models.URLField(max_length=500, verbose_name='Rasm URL')
     order = models.PositiveIntegerField(default=0, verbose_name='Tartib')
 
     class Meta:

@@ -13,12 +13,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
     def image_preview(self, obj):
         if obj.image:
-            return format_html(
-                '<img src="{}" style="max-height: 50px; max-width: 80px; object-fit: contain;" />',
-                obj.image.url,
-            )
+            return format_html('<img src="{}" style="max-height:50px;max-width:80px;object-fit:contain;" />', obj.image)
         return '—'
-
     image_preview.short_description = 'Rasm'
 
 
@@ -33,17 +29,12 @@ class PromoCategoryAdmin(admin.ModelAdmin):
 
     def get_link(self, obj):
         return f'/gift-for/{obj.slug}'
-
     get_link.short_description = 'Havola'
 
     def image_preview(self, obj):
         if obj.image:
-            return format_html(
-                '<img src="{}" style="max-height: 50px; max-width: 80px; object-fit: contain;" />',
-                obj.image.url,
-            )
+            return format_html('<img src="{}" style="max-height:50px;max-width:80px;object-fit:contain;" />', obj.image)
         return '—'
-
     image_preview.short_description = 'Rasm'
 
 
@@ -56,12 +47,8 @@ class BannerAdmin(admin.ModelAdmin):
 
     def image_preview(self, obj):
         if obj.image:
-            return format_html(
-                '<img src="{}" style="max-height: 50px; max-width: 120px; object-fit: contain;" />',
-                obj.image.url,
-            )
+            return format_html('<img src="{}" style="max-height:50px;max-width:120px;object-fit:contain;" />', obj.image)
         return '—'
-
     image_preview.short_description = 'Rasm'
 
 
@@ -87,10 +74,7 @@ class HasDiscountFilter(admin.SimpleListFilter):
     parameter_name = 'has_discount'
 
     def lookups(self, request, model_admin):
-        return (
-            ('yes', "Chegirma bor"),
-            ('no', "Chegirma yo'q"),
-        )
+        return (('yes', "Chegirma bor"), ('no', "Chegirma yo'q"))
 
     def queryset(self, request, queryset):
         if self.value() == 'yes':
@@ -102,20 +86,7 @@ class HasDiscountFilter(admin.SimpleListFilter):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = (
-        'title',
-        'category',
-        'price',
-        'discount_percent',
-        'discount_display',
-        'view_count',
-        'favorite_count',
-        'sold_count',
-        'is_featured',
-        'is_active',
-        'image_preview',
-        'created_at',
-    )
+    list_display = ('title', 'category', 'price', 'discount_percent', 'discount_display', 'view_count', 'favorite_count', 'sold_count', 'is_featured', 'is_active', 'image_preview', 'created_at')
     list_filter = ('category', 'is_featured', 'is_active', HasDiscountFilter, 'promo_categories')
     list_editable = ('discount_percent', 'is_featured', 'is_active')
     list_per_page = 25
@@ -127,28 +98,13 @@ class ProductAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
 
     fieldsets = (
-        (None, {
-            'fields': ('category', 'title', 'slug', 'description', 'is_active', 'is_featured'),
-        }),
-        ('Narx', {
-            'fields': ('price', 'discount_percent', 'discount_price'),
-        }),
-        ('Analitika (faqat ko\'rish)', {
-            'fields': ('view_count', 'favorite_count', 'sold_count'),
-            'classes': ('collapse',),
-        }),
-        ('Promo', {
-            'fields': ('promo_categories',),
-            'classes': ('collapse',),
-        }),
-        ('Buyurtma eslatmasi (faqat admin va Telegram bot)', {
-            'fields': ('order_note',),
-            'classes': ('collapse',),
-            'description': 'Bu matn saytda ko\'rinmaydi. Faqat admin panelda va buyurtma cheki Telegram ga yuborilganda ko\'rsatiladi.',
-        }),
+        (None, {'fields': ('category', 'title', 'slug', 'description', 'is_active', 'is_featured')}),
+        ('Narx', {'fields': ('price', 'discount_percent', 'discount_price')}),
+        ("Analitika (faqat ko'rish)", {'fields': ('view_count', 'favorite_count', 'sold_count'), 'classes': ('collapse',)}),
+        ('Promo', {'fields': ('promo_categories',), 'classes': ('collapse',)}),
+        ('Buyurtma eslatmasi', {'fields': ('order_note',), 'classes': ('collapse',)}),
     )
     readonly_fields = ('discount_price', 'view_count', 'favorite_count', 'sold_count')
-
     actions = ['mark_as_featured', 'mark_not_featured', 'apply_discount_10', 'apply_discount_20', 'remove_discount', 'disable_products', 'enable_products']
 
     @admin.action(description="Xit savdo qilib belgilash")
@@ -192,7 +148,7 @@ class ProductAdmin(admin.ModelAdmin):
     @admin.action(description="Mahsulotlarni o'chirish (faol emas)")
     def disable_products(self, request, queryset):
         updated = queryset.update(is_active=False)
-        self.message_user(request, f"{updated} ta mahsulot o'chirildi (faol emas).", messages.WARNING)
+        self.message_user(request, f"{updated} ta mahsulot o'chirildi.", messages.WARNING)
 
     @admin.action(description="Mahsulotlarni yoqish (faol)")
     def enable_products(self, request, queryset):
@@ -201,48 +157,28 @@ class ProductAdmin(admin.ModelAdmin):
 
     def discount_display(self, obj):
         if obj.discount_percent and obj.discount_percent > 0:
-            return format_html(
-                '<span style="color: green;">{}%</span> → {}',
-                obj.discount_percent,
-                obj.discount_price or '—',
-            )
+            return format_html('<span style="color:green;">{}%</span> → {}', obj.discount_percent, obj.discount_price or '—')
         return '—'
-
     discount_display.short_description = 'Chegirma'
 
     def save_formset(self, request, form, formset, change):
         if formset.model == ProductImage and formset.cleaned_data is not None:
             total = sum(1 for d in formset.cleaned_data if d and not d.get('DELETE'))
-            if total < 1:
-                raise ValidationError('Har bir mahsulotda kamida 1 ta rasm bo\'lishi kerak.')
             if total > 5:
-                raise ValidationError('Har bir mahsulotda eng ko\'pi 5 ta rasm bo\'lishi mumkin.')
+                raise ValidationError("Har bir mahsulotda eng ko'pi 5 ta rasm bo'lishi mumkin.")
         super().save_formset(request, form, formset, change)
 
     def image_preview(self, obj):
         first = obj.images.first()
         if first and first.image:
-            return format_html(
-                '<img src="{}" style="max-height: 50px; max-width: 80px; object-fit: contain;" />',
-                first.image.url,
-            )
+            return format_html('<img src="{}" style="max-height:50px;max-width:80px;object-fit:contain;" />', first.image)
         return '—'
-
     image_preview.short_description = 'Rasm'
 
 
 @admin.register(ProductAnalytics)
 class ProductAnalyticsAdmin(admin.ModelAdmin):
-    change_list_template = 'admin/store/productanalytics/changelist.html'
-    list_display = (
-        'product_link',
-        'views',
-        'favorites',
-        'cart_additions',
-        'purchases',
-        'last_viewed_at',
-        'conversion_hint',
-    )
+    list_display = ('product_link', 'views', 'favorites', 'cart_additions', 'purchases', 'last_viewed_at', 'conversion_hint')
     list_filter = ('product__category',)
     search_fields = ('product__title', 'product__slug')
     ordering = ('-views',)
@@ -259,16 +195,14 @@ class ProductAnalyticsAdmin(admin.ModelAdmin):
             url = f'/admin/store/product/{obj.product_id}/change/'
             return format_html('<a href="{}">{}</a>', url, obj.product.title)
         return '—'
-
     product_link.short_description = 'Mahsulot'
     product_link.admin_order_field = 'product__title'
 
     def conversion_hint(self, obj):
         if obj.views and obj.purchases:
             pct = min(100, round(100 * obj.purchases / obj.views, 1))
-            return format_html('<span style="color: green;">{}%</span>', pct)
+            return format_html('<span style="color:green;">{}%</span>', pct)
         return '—'
-
     conversion_hint.short_description = 'Konversiya'
 
     def changelist_view(self, request, extra_context=None):
