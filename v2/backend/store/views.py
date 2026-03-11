@@ -275,7 +275,7 @@ class OrderCreateView(APIView):
         total_price = cart.get_total_price()
         try:
             order = Order.objects.create(
-                name=data['name'],
+                full_name=data['name'],
                 phone=data['phone'],
                 delivery_address=data.get('delivery_address', '') or '',
                 cart=cart,
@@ -287,7 +287,7 @@ class OrderCreateView(APIView):
             for item in cart.items.select_related('product').all():
                 CartItem.objects.create(cart=new_cart, product=item.product, quantity=item.quantity)
             order = Order.objects.create(
-                name=data['name'],
+                full_name=data['name'],
                 phone=data['phone'],
                 delivery_address=data.get('delivery_address', '') or '',
                 cart=new_cart,
