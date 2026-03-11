@@ -1,5 +1,6 @@
 from django.core.cache import cache
 from django.db.models import F, Case, When, Value, Q
+from django.db import IntegrityError
 
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -24,14 +25,11 @@ from .serializers import (
     NewsletterSubscribeSerializer,
 )
 
-CACHE_TIMEOUT = 300  # 5 minutes for categories, featured, banners, promo (home page data)
+CACHE_TIMEOUT = 300
 CACHE_HEADERS = {"Cache-Control": "public, max-age=300"}
 
 
 def _cached_list_response(request, cache_key, queryset, serializer_class):
-    """Return cached JSON list or compute, cache, and return with Cache-Control.
-    If cache backend (e.g. Redis) is unavailable, returns fresh data without caching.
-    """
     try:
         data = cache.get(cache_key)
         if data is not None:
@@ -52,9 +50,7 @@ class CategoryList(generics.ListAPIView):
     serializer_class = CategorySerializer
 
     def list(self, request, *args, **kwargs):
-        return _cached_list_response(
-            request, "store:categories", self.get_queryset(), self.get_serializer_class()
-        )
+        return _cached_list_response(request, "store:categories", self.get_queryset(), self.get_serializer_class())
 
 
 class ProductList(generics.ListAPIView):
@@ -63,7 +59,6 @@ class ProductList(generics.ListAPIView):
 
 
 class ProductSearchList(generics.ListAPIView):
-    """GET /api/products/search/?q=keyword — search by title, description, category name (icontains)."""
     serializer_class = ProductSearchSerializer
 
     def get_queryset(self):
@@ -72,11 +67,7 @@ class ProductSearchList(generics.ListAPIView):
             return Product.objects.none()
         return (
             Product.objects.filter(is_active=True)
-            .filter(
-                Q(title__icontains=q)
-                | Q(description__icontains=q)
-                | Q(category__name__icontains=q)
-            )
+            .filter(Q(title__icontains=q) | Q(description__icontains=q) | Q(category__name__icontains=q))
             .select_related('category')
             .prefetch_related('images')
             .distinct()[:20]
@@ -84,59 +75,34 @@ class ProductSearchList(generics.ListAPIView):
 
 
 class FeaturedProductList(generics.ListAPIView):
-    """Featured products for home page (cached for home)."""
-    queryset = (
-        Product.objects.filter(is_active=True, is_featured=True)
-        .select_related('category')
-        .prefetch_related('images', 'specs')
-    )
+    queryset = Product.objects.filter(is_active=True, is_featured=True).select_related('category').prefetch_related('images', 'specs')
     serializer_class = ProductSerializer
 
     def list(self, request, *args, **kwargs):
-        return _cached_list_response(
-            request, "store:featured_products", self.get_queryset(), self.get_serializer_class()
-        )
+        return _cached_list_response(request, "store:featured_products", self.get_queryset(), self.get_serializer_class())
 
 
 class NewProductsList(generics.ListAPIView):
-    """Yangi mahsulotlar (bosh sahifa uchun, limit 8, cached)."""
     serializer_class = ProductSerializer
 
     def get_queryset(self):
-        return (
-            Product.objects.filter(is_active=True)
-            .select_related('category')
-            .prefetch_related('images', 'specs')
-            .order_by('-created_at')[:8]
-        )
+        return Product.objects.filter(is_active=True).select_related('category').prefetch_related('images', 'specs').order_by('-created_at')[:8]
 
     def list(self, request, *args, **kwargs):
-        return _cached_list_response(
-            request, "store:new_products", self.get_queryset(), self.get_serializer_class()
-        )
+        return _cached_list_response(request, "store:new_products", self.get_queryset(), self.get_serializer_class())
 
 
 class BestSellersList(generics.ListAPIView):
-    """Eng ko'p sotilganlar (bosh sahifa uchun, limit 8, cached)."""
     serializer_class = ProductSerializer
 
     def get_queryset(self):
-        return (
-            Product.objects.filter(is_active=True)
-            .select_related('category')
-            .prefetch_related('images', 'specs')
-            .order_by('-sold_count')[:8]
-        )
+        return Product.objects.filter(is_active=True).select_related('category').prefetch_related('images', 'specs').order_by('-sold_count')[:8]
 
     def list(self, request, *args, **kwargs):
-        return _cached_list_response(
-            request, "store:best_sellers", self.get_queryset(), self.get_serializer_class()
-        )
+        return _cached_list_response(request, "store:best_sellers", self.get_queryset(), self.get_serializer_class())
 
 
 class ProductViewView(APIView):
-    """POST /api/products/view/ — record product page view. Increments Product.view_count and ProductAnalytics."""
-
     def post(self, request):
         ser = ProductViewSerializer(data=request.data)
         if not ser.is_valid():
@@ -171,23 +137,15 @@ class PromoCategoryList(generics.ListAPIView):
     serializer_class = PromoCategorySerializer
 
     def list(self, request, *args, **kwargs):
-        return _cached_list_response(
-            request, "store:promo_categories", self.get_queryset(), self.get_serializer_class()
-        )
+        return _cached_list_response(request, "store:promo_categories", self.get_queryset(), self.get_serializer_class())
 
 
 class PromoCategoryProductList(generics.ListAPIView):
-    """Mahsulotlar «kim uchun» bo'yicha: Onamga, Otamga va h.k."""
     serializer_class = ProductSerializer
 
     def get_queryset(self):
         slug = self.kwargs['slug']
-        return (
-            Product.objects.filter(promo_categories__slug=slug, is_active=True)
-            .select_related('category')
-            .prefetch_related('images', 'specs')
-            .distinct()
-        )
+        return Product.objects.filter(promo_categories__slug=slug, is_active=True).select_related('category').prefetch_related('images', 'specs').distinct()
 
 
 class BannerList(generics.ListAPIView):
@@ -195,23 +153,15 @@ class BannerList(generics.ListAPIView):
     serializer_class = BannerSerializer
 
     def list(self, request, *args, **kwargs):
-        return _cached_list_response(
-            request, "store:banners", self.get_queryset(), self.get_serializer_class()
-        )
+        return _cached_list_response(request, "store:banners", self.get_queryset(), self.get_serializer_class())
 
 
 class BannerProductsView(generics.ListAPIView):
-    """GET /api/banners/<id>/products/ — banner bilan bog'langan mahsulotlar (masalan, 8-mart sovg'alari)."""
     serializer_class = ProductSerializer
 
     def get_queryset(self):
         banner_id = self.kwargs["pk"]
-        return (
-            Product.objects.filter(banners__id=banner_id, is_active=True)
-            .select_related("category")
-            .prefetch_related("images", "specs")
-            .distinct()
-        )
+        return Product.objects.filter(banners__id=banner_id, is_active=True).select_related("category").prefetch_related("images", "specs").distinct()
 
 
 # --- Cart ---
@@ -229,11 +179,7 @@ class CartAddView(APIView):
             product = Product.objects.get(pk=product_id, is_active=True)
         except Product.DoesNotExist:
             return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
-        item, created = CartItem.objects.get_or_create(
-            cart=cart,
-            product=product,
-            defaults={'quantity': quantity},
-        )
+        item, created = CartItem.objects.get_or_create(cart=cart, product=product, defaults={'quantity': quantity})
         if not created:
             item.quantity += quantity
             item.save(update_fields=['quantity'])
@@ -280,11 +226,7 @@ class CartUpdateView(APIView):
         if data['quantity'] == 0:
             CartItem.objects.filter(cart=cart, product=product).delete()
         else:
-            CartItem.objects.update_or_create(
-                cart=cart,
-                product=product,
-                defaults={'quantity': data['quantity']},
-            )
+            CartItem.objects.update_or_create(cart=cart, product=product, defaults={'quantity': data['quantity']})
         items = cart.items.select_related('product').prefetch_related('product__images').all()
         total = cart.get_total_price()
         return Response({
@@ -298,10 +240,7 @@ class CartRemoveView(APIView):
         session_id = request.data.get('session_id')
         product_id = request.data.get('product_id')
         if not session_id or product_id is None:
-            return Response(
-                {'error': 'session_id and product_id required'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            return Response({'error': 'session_id and product_id required'}, status=status.HTTP_400_BAD_REQUEST)
         try:
             cart = Cart.objects.get(session_id=session_id)
         except Cart.DoesNotExist:
@@ -334,14 +273,27 @@ class OrderCreateView(APIView):
         if cart.items.count() == 0:
             return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
         total_price = cart.get_total_price()
-        order = Order.objects.create(
-            name=data['name'],
-            phone=data['phone'],
-            delivery_address=data.get('delivery_address', '') or '',
-            cart=cart,
-            total_price=total_price,
-        )
-        cart_items = list(cart.items.select_related('product').prefetch_related('product__images').all())
+        try:
+            order = Order.objects.create(
+                name=data['name'],
+                phone=data['phone'],
+                delivery_address=data.get('delivery_address', '') or '',
+                cart=cart,
+                total_price=total_price,
+            )
+        except IntegrityError:
+            # Cart allaqachon order ga bog'langan — yangi cart yaratib order qilamiz
+            new_cart = Cart.objects.create(session_id=data['session_id'] + '_new')
+            for item in cart.items.select_related('product').all():
+                CartItem.objects.create(cart=new_cart, product=item.product, quantity=item.quantity)
+            order = Order.objects.create(
+                name=data['name'],
+                phone=data['phone'],
+                delivery_address=data.get('delivery_address', '') or '',
+                cart=new_cart,
+                total_price=total_price,
+            )
+        cart_items = list(order.cart.items.select_related('product').prefetch_related('product__images').all())
         for item in cart_items:
             record_product_purchase(item.product, item.quantity)
         send_order_to_telegram(order, cart_items)
@@ -351,26 +303,15 @@ class OrderCreateView(APIView):
 # --- Wishlist ---
 
 class WishlistListView(APIView):
-    """GET /api/wishlist/?session_id=xxx — list favorites."""
-
     def get(self, request):
         session_id = request.query_params.get('session_id')
         if not session_id:
             return Response({'items': []})
-        items = (
-            Wishlist.objects.filter(session_id=session_id)
-            .select_related('product')
-            .prefetch_related('product__images')
-            .order_by('-created_at')
-        )
-        return Response({
-            'items': WishlistItemSerializer(items, many=True, context={'request': request}).data,
-        })
+        items = Wishlist.objects.filter(session_id=session_id).select_related('product').prefetch_related('product__images').order_by('-created_at')
+        return Response({'items': WishlistItemSerializer(items, many=True, context={'request': request}).data})
 
 
 class WishlistAddView(APIView):
-    """POST /api/wishlist/add/ — add product to favorites. Updates product.favorite_count."""
-
     def post(self, request):
         ser = WishlistAddSerializer(data=request.data)
         if not ser.is_valid():
@@ -382,27 +323,19 @@ class WishlistAddView(APIView):
             product = Product.objects.get(pk=product_id, is_active=True)
         except Product.DoesNotExist:
             return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
-        obj, created = Wishlist.objects.get_or_create(
-            session_id=session_id,
-            product=product,
-        )
+        obj, created = Wishlist.objects.get_or_create(session_id=session_id, product=product)
         if created:
-            Product.objects.filter(pk=product_id).update(
-                favorite_count=F('favorite_count') + 1,
-            )
+            Product.objects.filter(pk=product_id).update(favorite_count=F('favorite_count') + 1)
         return Response(
             {'status': 'added', 'items': WishlistItemSerializer(
                 Wishlist.objects.filter(session_id=session_id).select_related('product').prefetch_related('product__images').order_by('-created_at'),
-                many=True,
-                context={'request': request},
+                many=True, context={'request': request},
             ).data},
             status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
         )
 
 
 class WishlistRemoveView(APIView):
-    """POST /api/wishlist/remove/ — remove product from favorites. Updates product.favorite_count."""
-
     def post(self, request):
         ser = WishlistRemoveSerializer(data=request.data)
         if not ser.is_valid():
@@ -413,36 +346,24 @@ class WishlistRemoveView(APIView):
         deleted, _ = Wishlist.objects.filter(session_id=session_id, product_id=product_id).delete()
         if deleted:
             Product.objects.filter(pk=product_id).update(
-                favorite_count=Case(
-                    When(favorite_count__gt=0, then=F('favorite_count') - 1),
-                    default=Value(0),
-                ),
+                favorite_count=Case(When(favorite_count__gt=0, then=F('favorite_count') - 1), default=Value(0))
             )
-        return Response({
-            'status': 'removed',
-            'items': WishlistItemSerializer(
-                Wishlist.objects.filter(session_id=session_id).select_related('product').prefetch_related('product__images').order_by('-created_at'),
-                many=True,
-                context={'request': request},
-            ).data,
-        })
+        return Response({'status': 'removed', 'items': WishlistItemSerializer(
+            Wishlist.objects.filter(session_id=session_id).select_related('product').prefetch_related('product__images').order_by('-created_at'),
+            many=True, context={'request': request},
+        ).data})
 
 
 # --- Newsletter ---
 
 class NewsletterSubscribeView(APIView):
-    """POST /api/newsletter/ — save email for «Yangiliklardan xabardor». No auth."""
-
     def post(self, request):
         ser = NewsletterSubscribeSerializer(data=request.data)
         if not ser.is_valid():
             return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
         email = ser.validated_data['email'].strip().lower()
-        obj, created = NewsletterSubscriber.objects.get_or_create(
-            email=email,
-            defaults={},
-        )
+        obj, created = NewsletterSubscriber.objects.get_or_create(email=email, defaults={})
         return Response(
-            {'status': 'subscribed', 'message': 'Email roʻyxatga qoʻshildi.'},
+            {'status': 'subscribed', 'message': "Email ro'yxatga qo'shildi."},
             status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
         )
