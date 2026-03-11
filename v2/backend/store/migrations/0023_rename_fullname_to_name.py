@@ -6,7 +6,7 @@ class Migration(migrations.Migration):
     ]
     operations = [
         migrations.RunSQL(
-            "ALTER TABLE store_order RENAME COLUMN full_name TO name;",
-            reverse_sql="ALTER TABLE store_order RENAME COLUMN name TO full_name;"
+            "ALTER TABLE store_order DROP COLUMN IF EXISTS full_name;",
+            reverse_sql="SELECT 1;"
         ),
     ]
