@@ -177,7 +177,7 @@ export function ProductSearchBar({
                       fill
                       sizes="(max-width: 461px) 50vw, 220px"
                       className="object-cover group-active:opacity-90"
-                      unoptimized={product.image.startsWith("http")}
+                      unoptimized={product.image?.startsWith("http")}
                     />
                   ) : (
                     <span className="absolute inset-0 flex items-center justify-center text-3xl">📦</span>
@@ -301,7 +301,7 @@ export function ProductSearchBar({
                           fill
                           sizes="64px"
                           className="object-cover"
-                          unoptimized={product.image.startsWith("http")}
+                          unoptimized={product.image?.startsWith("http")}
                         />
                       ) : (
                         <span className="absolute inset-0 flex items-center justify-center text-2xl">📦</span>

@@ -84,7 +84,7 @@ export function QidiruvContent() {
                       fill
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      unoptimized={product.image.startsWith("http")}
+                      unoptimized={product.image?.startsWith("http")}
                     />
                   ) : (
                     <span className="absolute inset-0 flex items-center justify-center text-4xl">📦</span>

@@ -107,7 +107,7 @@ export function ProductCard({ product, isInWishlist = false, onWishlistChange }:
           sizes="(max-width:768px) 50vw, (max-width:1024px) 33vw, 25vw"
           loading="lazy"
           className="object-cover md:group-hover:scale-105 transition-transform duration-500"
-          unoptimized={imageSrc.startsWith("http")}
+          unoptimized={imageSrc?.startsWith("http")}
         />
         <div className="absolute bottom-2 right-2 z-10">
           <button

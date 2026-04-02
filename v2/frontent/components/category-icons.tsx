@@ -104,7 +104,7 @@ export function CategoryIcons({ initialCategories }: CategoryIconsProps) {
                     sizes="(max-width:768px) 110px, 140px"
                     loading="lazy"
                     className="object-cover"
-                    unoptimized={cat.image.startsWith("http")}
+                    unoptimized={cat.image?.startsWith("http")}
                   />
                 ) : (
                   <span className="absolute inset-0 flex items-center justify-center text-3xl sm:text-4xl">📦</span>

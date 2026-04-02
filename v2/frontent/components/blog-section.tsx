@@ -70,7 +70,7 @@ export function BlogSection({ services }: BlogSectionProps) {
                         sizes="(max-width:768px) 220px, 260px"
                         loading="lazy"
                         className="object-cover md:group-hover:scale-105 transition-transform duration-500"
-                        unoptimized={cardImage.startsWith("http")}
+                        unoptimized={cardImage?.startsWith("http")}
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center">

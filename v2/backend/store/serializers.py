@@ -1,4 +1,14 @@
 from rest_framework import serializers
+from django.conf import settings
+
+def _build_url(path):
+    if not path:
+        return None
+    if str(path).startswith('http'):
+        return str(path)
+    site_url = getattr(settings, 'SITE_URL', 'http://16.171.226.43:8000')
+    return f"{site_url}/media/{str(path)}"
+
 from .models import Category, Product, ProductImage, Cart, CartItem, Order, PromoCategory, Banner, Wishlist
 
 
@@ -13,8 +23,8 @@ class CategorySerializer(serializers.ModelSerializer):
         if obj.image:
             request = self.context.get('request')
             if request:
-                return request.build_absolute_uri(obj.image.url)
-            return obj.image.url
+                return _build_url(obj.image)
+            return obj.image.url if hasattr(obj.image, "url") else obj.image if hasattr(obj.image, "url") else obj.image
         return None
 
 
@@ -25,7 +35,7 @@ def _product_image_urls(obj, request):
     urls = []
     for img in obj.images.all():
         if img.image:
-            url = request.build_absolute_uri(img.image.url) if request else img.image.url
+            url = _build_url(img.image)
             urls.append(url)
     return urls
 
@@ -100,8 +110,8 @@ class PromoCategorySerializer(serializers.ModelSerializer):
         if obj.image:
             request = self.context.get('request')
             if request:
-                return request.build_absolute_uri(obj.image.url)
-            return obj.image.url
+                return _build_url(obj.image)
+            return obj.image.url if hasattr(obj.image, "url") else obj.image if hasattr(obj.image, "url") else obj.image
         return None
 
     def get_link(self, obj):
@@ -121,8 +131,8 @@ class BannerSerializer(serializers.ModelSerializer):
         if obj.image:
             request = self.context.get('request')
             if request:
-                return request.build_absolute_uri(obj.image.url)
-            return obj.image.url
+                return _build_url(obj.image)
+            return obj.image.url if hasattr(obj.image, "url") else obj.image if hasattr(obj.image, "url") else obj.image
         return None
 
 

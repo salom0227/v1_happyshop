@@ -61,7 +61,7 @@ export function ServiceGallery({ images, title }: ServiceGalleryProps) {
                 sizes="(max-width:640px) 50vw, (max-width:1024px) 50vw, 33vw"
                 loading="lazy"
                 className="object-cover"
-                unoptimized={src.startsWith("http")}
+                unoptimized={src?.startsWith("http")}
               />
             </div>
             {caption && (
@@ -100,7 +100,7 @@ export function ServiceGallery({ images, title }: ServiceGalleryProps) {
               width={1200}
               height={800}
               className="max-w-full max-h-[85vh] w-auto h-auto object-contain rounded-lg"
-              unoptimized={images[lightboxIndex].src.startsWith("http")}
+              unoptimized={images[lightboxIndex].src?.startsWith("http")}
               priority
             />
           </div>

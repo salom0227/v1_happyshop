@@ -126,8 +126,10 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://v1-happyshop.vercel.app",
-    "https://v1-happyshop-bix54aq6x-salom0227s-projects.vercel.app",
+    "https://v1-happyshop.*.vercel.app",
+    "http://16.171.226.43:3000",
+    "https://v1-happyshop.*.vercel.app",
+    "http://16.171.226.43:3000",
 ]
 
 CORS_ALLOWED_ORIGIN_REGEXES = [

@@ -36,7 +36,7 @@ export function PromoBanner({ items }: PromoBannerProps) {
                     sizes="80px"
                     loading="lazy"
                     className="object-cover"
-                    unoptimized={item.image.startsWith("http")}
+                    unoptimized={item.image?.startsWith("http")}
                   />
                 ) : (
                   <span className="absolute inset-0 flex items-center justify-center text-2xl">🎁</span>

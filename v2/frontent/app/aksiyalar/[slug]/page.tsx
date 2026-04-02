@@ -70,7 +70,7 @@ export default async function PromotionDetailPage({ params }: { params: Promise<
                   fill
                   sizes="(max-width:768px) 100vw, (max-width:1024px) 70vw, 800px"
                   className="object-cover"
-                  unoptimized={promo.image.startsWith("http")}
+                  unoptimized={promo.image?.startsWith("http")}
                 />
               </div>
             )}

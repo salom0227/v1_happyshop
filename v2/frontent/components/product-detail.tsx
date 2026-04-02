@@ -118,7 +118,7 @@ export function ProductDetail({ product, slug }: ProductDetailProps) {
               priority
               sizes="(max-width:768px) 100vw, (max-width:1024px) 55vw, 480px"
               className="object-cover"
-              unoptimized={images[selectedImage].startsWith("http")}
+              unoptimized={images[selectedImage]?.startsWith("http")}
             />
             {product.is_featured && (
               <div className="absolute top-4 left-4">
@@ -146,7 +146,7 @@ export function ProductDetail({ product, slug }: ProductDetailProps) {
                     sizes="64px"
                     loading="lazy"
                     className="object-cover"
-                    unoptimized={img.startsWith("http")}
+                    unoptimized={img?.startsWith("http")}
                   />
                 </div>
               </button>

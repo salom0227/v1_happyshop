@@ -92,7 +92,7 @@ export default async function XizmatDetailPage({ params }: Props) {
                   priority
                   sizes="(max-width:768px) 100vw, 1024px"
                   className="object-cover"
-                  unoptimized={(page.image || page.images![0]).startsWith("http")}
+                  unoptimized={(page.image || page.images![0])?.startsWith("http")}
                 />
               </div>
             </div>

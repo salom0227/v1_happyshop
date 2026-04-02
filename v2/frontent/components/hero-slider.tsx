@@ -59,7 +59,7 @@ export function HeroSlider({ banners }: HeroSliderProps) {
               loading={banner.id === banners[0].id ? undefined : "lazy"}
               sizes="(max-width:768px) 100vw, (max-width:1200px) 100vw, 1200px"
               className="object-cover"
-              unoptimized={banner.image.startsWith("http")}
+              unoptimized={banner.image?.startsWith("http")}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[#1a1028]/80 via-[#1a1028]/40 to-transparent flex items-center">
               <div className="pl-4 pr-4 sm:pl-8 md:pl-16 max-w-lg relative z-10">

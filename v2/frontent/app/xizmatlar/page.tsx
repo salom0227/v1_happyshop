@@ -60,7 +60,7 @@ export default async function XizmatlarPage() {
                         sizes="(max-width:768px) 50vw, (max-width:1024px) 33vw, 25vw"
                         className="object-cover md:group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
-                        unoptimized={cardImage.startsWith("http")}
+                        unoptimized={cardImage?.startsWith("http")}
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center">
