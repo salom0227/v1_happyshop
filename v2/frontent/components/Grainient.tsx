@@ -183,8 +183,8 @@ export default function Grainient({
       antialias: false,
     })
 
-    const gl = renderer.gl as WebGL2RenderingContext
-    const canvas = gl.canvas as HTMLCanvasElement
+    const gl = renderer.gl
+    const canvas = renderer.gl.canvas as HTMLCanvasElement
     canvas.style.width = "100%"
     canvas.style.height = "100%"
     canvas.style.display = "block"
