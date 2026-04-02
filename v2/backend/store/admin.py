@@ -268,3 +268,38 @@ class NewsletterSubscriberAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at',)
     date_hierarchy = 'created_at'
     list_per_page = 50
+
+
+# Supabase upload widget
+from django import forms
+from .widgets import SupabaseImageWidget
+
+
+class CategoryAdminForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = '__all__'
+        widgets = {'image': SupabaseImageWidget()}
+
+class PromoCategoryAdminForm(forms.ModelForm):
+    class Meta:
+        model = PromoCategory
+        fields = '__all__'
+        widgets = {'image': SupabaseImageWidget()}
+
+class BannerAdminForm(forms.ModelForm):
+    class Meta:
+        model = Banner
+        fields = '__all__'
+        widgets = {'image': SupabaseImageWidget()}
+
+class ProductImageAdminForm(forms.ModelForm):
+    class Meta:
+        model = ProductImage
+        fields = '__all__'
+        widgets = {'image': SupabaseImageWidget()}
+
+CategoryAdmin.form = CategoryAdminForm
+PromoCategoryAdmin.form = PromoCategoryAdminForm
+BannerAdmin.form = BannerAdminForm
+ProductImageInline.form = ProductImageAdminForm

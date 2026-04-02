@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "analytics",
     "services",
     "banners",
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -258,3 +259,17 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success",
     },
 }
+
+# Supabase Storage
+import boto3  # noqa
+from storages.backends.s3boto3 import S3Boto3Storage  # noqa
+USE_SUPABASE = os.getenv("USE_SUPABASE", "False").lower() in ("true", "1", "yes")
+if USE_SUPABASE:
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    AWS_ACCESS_KEY_ID = os.getenv("SUPABASE_ACCESS_KEY")
+    AWS_SECRET_ACCESS_KEY = os.getenv("SUPABASE_SECRET_KEY")
+    AWS_STORAGE_BUCKET_NAME = os.getenv("SUPABASE_BUCKET", "media")
+    AWS_S3_ENDPOINT_URL = os.getenv("SUPABASE_URL")
+    AWS_DEFAULT_ACL = "public-read"
+    AWS_S3_FILE_OVERWRITE = False
+    MEDIA_URL = f"{os.getenv('SUPABASE_URL')}/storage/v1/object/public/media/"
