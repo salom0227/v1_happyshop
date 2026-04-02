@@ -72,6 +72,7 @@ export function ProductDetail({ product, slug }: ProductDetailProps) {
   }
 
   const handleAddToCart = async () => {
+    if (!product) return
     const sessionId = getCartSessionId()
     if (!sessionId) return
     setAddingToCart(true)
