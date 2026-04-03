@@ -155,9 +155,8 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 
-REDIS_URL = os.getenv("REDIS_URL", "redis://127.0.0.1:6379/1")
-try:
-    import django_redis  # noqa: F401
+REDIS_URL = os.getenv("REDIS_URL", "")
+if REDIS_URL:
     CACHES = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
@@ -167,12 +166,10 @@ try:
             "TIMEOUT": 300,
         }
     }
-except ImportError:
+else:
     CACHES = {
         "default": {
-            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-            "LOCATION": "happy-shop-default",
-            "TIMEOUT": 300,
+            "BACKEND": "django.core.cache.backends.dummy.DummyCache",
         }
     }
 
