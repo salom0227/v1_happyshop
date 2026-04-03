@@ -27,3 +27,5 @@ urlpatterns = [
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+from django.urls import path
+from store.views import clear_cache_view

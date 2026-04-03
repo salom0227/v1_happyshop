@@ -367,3 +367,11 @@ class NewsletterSubscribeView(APIView):
             {'status': 'subscribed', 'message': "Email ro'yxatga qo'shildi."},
             status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
         )
+
+
+# TEMP: cache clear endpoint
+from django.http import JsonResponse
+from django.core.cache import cache as _cache
+def clear_cache_view(request):
+    _cache.clear()
+    return JsonResponse({"status": "cleared"})
