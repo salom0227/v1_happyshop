@@ -29,3 +29,5 @@ urlpatterns = [
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 from django.urls import path
 from store.views import clear_cache_view
+from store.upload_view import upload_image
+urlpatterns += [path("api/upload/", upload_image)]
