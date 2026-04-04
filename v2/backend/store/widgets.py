@@ -21,7 +21,12 @@ class SupabaseImageWidget(forms.TextInput):
     fd.append('csrfmiddlewaretoken', csrf.value);
     input.disabled=true;
     fetch('/api/upload/', {{method:'POST', body:fd}})
-    .then(function(r){{ return r.json(); }})
+    .then(function(r){{
+      return r.text().then(function(text){{
+        try {{ return JSON.parse(text); }}
+        catch(e) {{ alert('Server javobi: ' + text.substring(0,200)); throw e; }}
+      }});
+    }})
     .then(function(d){{
       if(d.url){{
         document.querySelector('[name=\\'{name}\\']').value=d.url;
@@ -29,13 +34,11 @@ class SupabaseImageWidget(forms.TextInput):
         ok.style.color='green';
         ok.textContent=' ✅ Yuklandi!';
         input.parentNode.appendChild(ok);
-        var img=document.querySelector('#{name}_preview');
-        if(img){{ img.src=d.url; }}
       }} else {{
         alert('Xato: '+JSON.stringify(d));
       }}
       input.disabled=false;
-    }}).catch(function(e){{ alert('Xato: '+e); input.disabled=false; }});
+    }}).catch(function(e){{ input.disabled=false; }});
   }})(this)" />
         ''', name=name)
         return format_html('{}{}{}', preview, url_input, script)
