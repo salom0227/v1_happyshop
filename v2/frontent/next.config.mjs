@@ -11,6 +11,7 @@ const nextConfig = {
       { protocol: "http", hostname: "192.168.0.134", port: "8000", pathname: "/media/**" },
       { protocol: "https", hostname: "placehold.co", pathname: "/**" },
       { protocol: "https", hostname: "v1-happyshop-3.onrender.com", pathname: "/media/**" },
+      { protocol: "https", hostname: "vsubrvakueksfxnqvwpz.supabase.co", pathname: "/**" },
     ],
   },
   compress: true,
