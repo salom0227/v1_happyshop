@@ -4,7 +4,7 @@ import type { Banner } from "@/types/banner"
 import type { PromoCategory } from "@/types/promo-category"
 
 /** Cache 5 min (matches backend Redis cache). */
-const HOME_CACHE = 300
+const HOME_CACHE = 0
 
 export async function getCategories(): Promise<Category[]> {
   return apiRequest<Category[]>("/categories/", { revalidate: HOME_CACHE })
